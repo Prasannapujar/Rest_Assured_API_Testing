@@ -5,9 +5,9 @@ import org.testng.annotations.Test;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
-public class HelloRestAssured {
+public class HelloRestAssured extends BaseApiTest {
 
-    String key="PMAK-68746418c48f5b0001caff";
+
 
     @Test
     public void test()
