@@ -18,11 +18,8 @@ public class HelloRestAssured extends BaseApiTest {
     @Test
     public void testPostmanWorkspacesAPI() {
         given()
+            .spec(requestSpecification)
             .log().all()
-            .baseUri("https://api.getpostman.com")
-            //.header(header) // Option 1
-            //.headers(headers) // Option 2
-            .headers(headersMap)
         .when()
             .get("/workspaces")
         .then()
@@ -37,11 +34,8 @@ public class HelloRestAssured extends BaseApiTest {
     @Test
     public void extractResponse() {
         Response response = given()
+            .spec(requestSpecification)
             .log().all()
-            .baseUri("https://api.getpostman.com")
-            //.header(header) // Option 1
-            //.headers(headers) // Option 2
-            .headers(headersMap)
         .when()
             .get("/workspaces")
         .then()
@@ -57,11 +51,8 @@ public class HelloRestAssured extends BaseApiTest {
     @Test
     public void extractJsonValues() {
         Response response = given()
+            .spec(requestSpecification)
             .log().all()
-            .baseUri("https://api.getpostman.com")
-            //.header(header) // Option 1
-            //.headers(headers) // Option 2
-            .headers(headersMap)
         .when()
             .get("/workspaces")
         .then()
@@ -84,11 +75,8 @@ public class HelloRestAssured extends BaseApiTest {
     @Test
     public void different_validation() {
         given()
+            .spec(requestSpecification)
             .log().all()
-            .baseUri("https://api.getpostman.com")
-            //.header(header) // Option 1
-            //.headers(headers) // Option 2
-            .headers(headersMap)
         .when()
             .get("/workspaces")
         .then()

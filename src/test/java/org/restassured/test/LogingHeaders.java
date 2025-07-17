@@ -25,11 +25,8 @@ public class LogingHeaders extends BaseApiTest {
     @Test
     public void logSpecific() {
         given()
+            .spec(requestSpecification)
             .log().headers()
-            .baseUri("https://api.getpostman.com")
-            //.header(header) // Option 1
-            //.headers(headers) // Option 2
-            .headers(headersMap)
         .when()
             .get("/workspaces")
         .then()
@@ -43,11 +40,8 @@ public class LogingHeaders extends BaseApiTest {
     @Test
     public void logWhenFailed() {
         given()
+                .spec(requestSpecification)
                 .log().headers()
-                .baseUri("https://api.getpostman.com")
-                //.header(header) // Option 1
-                //.headers(headers) // Option 2
-                .headers(headersMap)
                 .when()
                 .get("/workspaces")
                 .then()
@@ -61,12 +55,9 @@ public class LogingHeaders extends BaseApiTest {
     @Test
     public void blacklistheader() {
         given()
+                .spec(requestSpecification)
                 .config(config().logConfig(LogConfig.logConfig().blacklistHeader("X-Api-Key")))
                 .log().headers()
-                .baseUri("https://api.getpostman.com")
-                //.header(header) // Option 1
-                //.headers(headers) // Option 2
-                .headers(headersMap)
                 .when()
                 .get("/workspaces")
                 .then()
@@ -80,11 +71,8 @@ public class LogingHeaders extends BaseApiTest {
     @Test
     public void logOnlyWhenErrored() {
         given()
+                .spec(requestSpecification)
                 .config(config().logConfig(LogConfig.logConfig().enableLoggingOfRequestAndResponseIfValidationFails()))
-                .baseUri("https://api.getpostman.com")
-                //.header(header) // Option 1
-                //.headers(headers) // Option 2
-                .headers(headersMap)
                 .when()
                 .get("/workspaces")
                 .then()
