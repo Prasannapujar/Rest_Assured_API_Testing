@@ -27,7 +27,9 @@ public class LogingHeaders extends BaseApiTest {
         given()
             .log().headers()
             .baseUri("https://api.getpostman.com")
-            .header("X-Api-Key", key)
+            //.header(header) // Option 1
+            //.headers(headers) // Option 2
+            .headers(headersMap)
         .when()
             .get("/workspaces")
         .then()
@@ -43,7 +45,9 @@ public class LogingHeaders extends BaseApiTest {
         given()
                 .log().headers()
                 .baseUri("https://api.getpostman.com")
-                .header("X-Api-Key", key)
+                //.header(header) // Option 1
+                //.headers(headers) // Option 2
+                .headers(headersMap)
                 .when()
                 .get("/workspaces")
                 .then()
@@ -60,7 +64,9 @@ public class LogingHeaders extends BaseApiTest {
                 .config(config().logConfig(LogConfig.logConfig().blacklistHeader("X-Api-Key")))
                 .log().headers()
                 .baseUri("https://api.getpostman.com")
-                .header("X-Api-Key", key)
+                //.header(header) // Option 1
+                //.headers(headers) // Option 2
+                .headers(headersMap)
                 .when()
                 .get("/workspaces")
                 .then()
@@ -76,7 +82,9 @@ public class LogingHeaders extends BaseApiTest {
         given()
                 .config(config().logConfig(LogConfig.logConfig().enableLoggingOfRequestAndResponseIfValidationFails()))
                 .baseUri("https://api.getpostman.com")
-                .header("X-Api-Key", key)
+                //.header(header) // Option 1
+                //.headers(headers) // Option 2
+                .headers(headersMap)
                 .when()
                 .get("/workspaces")
                 .then()

@@ -20,7 +20,9 @@ public class HelloRestAssured extends BaseApiTest {
         given()
             .log().all()
             .baseUri("https://api.getpostman.com")
-            .header("X-Api-Key", key)
+            //.header(header) // Option 1
+            //.headers(headers) // Option 2
+            .headers(headersMap)
         .when()
             .get("/workspaces")
         .then()
@@ -37,7 +39,9 @@ public class HelloRestAssured extends BaseApiTest {
         Response response = given()
             .log().all()
             .baseUri("https://api.getpostman.com")
-            .header("X-Api-Key", key)
+            //.header(header) // Option 1
+            //.headers(headers) // Option 2
+            .headers(headersMap)
         .when()
             .get("/workspaces")
         .then()
@@ -55,7 +59,9 @@ public class HelloRestAssured extends BaseApiTest {
         Response response = given()
             .log().all()
             .baseUri("https://api.getpostman.com")
-            .header("X-Api-Key", key)
+            //.header(header) // Option 1
+            //.headers(headers) // Option 2
+            .headers(headersMap)
         .when()
             .get("/workspaces")
         .then()
@@ -80,7 +86,9 @@ public class HelloRestAssured extends BaseApiTest {
         given()
             .log().all()
             .baseUri("https://api.getpostman.com")
-            .header("X-Api-Key", key)
+            //.header(header) // Option 1
+            //.headers(headers) // Option 2
+            .headers(headersMap)
         .when()
             .get("/workspaces")
         .then()
