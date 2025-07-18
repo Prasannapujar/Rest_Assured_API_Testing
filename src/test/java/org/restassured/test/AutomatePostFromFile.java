@@ -5,25 +5,27 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
-import io.restassured.specification.QueryableRequestSpecification;
-import io.restassured.specification.RequestSpecification;
+import io.restassured.response.Response;
 import io.restassured.specification.ResponseSpecification;
-import io.restassured.specification.SpecificationQuerier;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.hasItems;
+import static io.restassured.RestAssured.with;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
-public class DefaultRequestSpec {
+public class AutomatePostFromFile {
+
     String apiKey;
     ResponseSpecification responseSpecification;
-
 
     @BeforeClass
     public void setup() {
@@ -48,44 +50,42 @@ public class DefaultRequestSpec {
 
         ResponseSpecBuilder responseSpecBuilder=new ResponseSpecBuilder();
         responseSpecBuilder.expectStatusCode(200)
-                .expectContentType(ContentType.XML)
+                .expectContentType(ContentType.JSON)
                 . log(LogDetail.ALL);
 
-        responseSpecification=responseSpecBuilder.build();
+      //  responseSpecification=responseSpecBuilder.build();
         RestAssured.responseSpecification=responseSpecBuilder.build();
 
 
     }
 
     @Test
-    public void testGetWorkspaces() {
-        given()
-                .get("/workspaces")
+    public void createworkspacefile() {
+        File requestFile = new File("src/main/resources/createworkspace.json");
+        RestAssured.given()
+                .body(requestFile)
+                .when()
+                .post("/workspaces")
                 .then()
-                .statusCode(200)
-                .body("workspaces.name", hasItems("Team Workspace", "My Workspace"));
+                .assertThat()
+                .body("workspace.name", equalTo("Frontend Dev Hub"));
     }
+   @Test
+    public void createworkspaceFromHashmap() {
+        Map<String, Object> workspaceDetails = new HashMap<>();
+        workspaceDetails.put("name", "Frontend Dev Hub");
+        workspaceDetails.put("type", "personal");
+        workspaceDetails.put("description", "A workspace for frontend development projects");
 
-    @Test
-    public void queryRequestSpec()
-    {
-        QueryableRequestSpecification queryableRequestSpecification= SpecificationQuerier.query(RestAssured.requestSpecification);
-        System.out.println("Base URI: " + queryableRequestSpecification.getBaseUri());
-    }
-
-    @Test
-    public void testGetWorkspaces2() {  // with response specification
-        given()
-                .get("/workspaces")
-                .then().spec(responseSpecification);
-
-    }
-
-    @Test
-    public void testGetWorkspaces_default() {
-        given()
-                .get("/workspaces");
-
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("workspace", workspaceDetails);
+        RestAssured.given()
+                .body(requestBody)
+                .when()
+                .post("/workspaces")
+                .then()
+                .assertThat()
+                .body("workspace.name", equalTo("Frontend Dev Hub"));
     }
 
 

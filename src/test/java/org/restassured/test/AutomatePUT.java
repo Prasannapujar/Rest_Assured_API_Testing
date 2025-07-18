@@ -5,10 +5,8 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
-import io.restassured.specification.QueryableRequestSpecification;
-import io.restassured.specification.RequestSpecification;
+import io.restassured.response.Response;
 import io.restassured.specification.ResponseSpecification;
-import io.restassured.specification.SpecificationQuerier;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -17,13 +15,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.hasItems;
+import static io.restassured.RestAssured.with;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
-public class DefaultRequestSpec {
+public class AutomatePUT {
+
     String apiKey;
     ResponseSpecification responseSpecification;
-
 
     @BeforeClass
     public void setup() {
@@ -48,45 +47,38 @@ public class DefaultRequestSpec {
 
         ResponseSpecBuilder responseSpecBuilder=new ResponseSpecBuilder();
         responseSpecBuilder.expectStatusCode(200)
-                .expectContentType(ContentType.XML)
+                .expectContentType(ContentType.JSON)
                 . log(LogDetail.ALL);
 
-        responseSpecification=responseSpecBuilder.build();
+      //  responseSpecification=responseSpecBuilder.build();
         RestAssured.responseSpecification=responseSpecBuilder.build();
 
 
     }
 
-    @Test
-    public void testGetWorkspaces() {
-        given()
-                .get("/workspaces")
-                .then()
-                .statusCode(200)
-                .body("workspaces.name", hasItems("Team Workspace", "My Workspace"));
-    }
+
 
     @Test
-    public void queryRequestSpec()
-    {
-        QueryableRequestSpecification queryableRequestSpecification= SpecificationQuerier.query(RestAssured.requestSpecification);
-        System.out.println("Base URI: " + queryableRequestSpecification.getBaseUri());
+    public void updateWorkspaceNonBddPut() {
+        String workspaceId = "7e7f6b71-4cae-489b-a4f8-651c672a04d6"; // Replace with the actual workspace ID you want to update
+        String requestBody = "{\n" +
+                "  \"workspace\": {\n" +
+                "    \"name\": \"Frontend Dev Hub\",\n" +
+                "    \"type\": \"personal\"\n" +
+                "  }\n" +
+                "}";
+
+       Response response= with()
+                .body(requestBody)
+               .pathParam("workspaceId", workspaceId)
+                .put("/workspaces"+"/{workspaceId}");
+
+        System.out.println(response.asString());
+
+       // assertThat(response.statusCode(), equalTo(200));
+        assertThat(response.jsonPath().getString("workspace.name"), equalTo("Frontend Dev Hub"));
+       // assertThat(response.jsonPath().getString("workspace.type"), equalTo("personal"));
+
+
     }
-
-    @Test
-    public void testGetWorkspaces2() {  // with response specification
-        given()
-                .get("/workspaces")
-                .then().spec(responseSpecification);
-
-    }
-
-    @Test
-    public void testGetWorkspaces_default() {
-        given()
-                .get("/workspaces");
-
-    }
-
-
 }
